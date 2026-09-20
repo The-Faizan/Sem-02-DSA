@@ -1,0 +1,150 @@
+#include <stdio.h>
+int i;
+
+void traversal(int arr[], int n);
+void lsearch(int arr[], int n);
+void insertion(int arr[], int *n);
+void deletion(int arr[], int *n);
+void sort(int arr[], int n);
+void bsearch(int arr[], int n);
+
+int main()
+{
+    int arr[100], size;
+
+    printf("Enter the Size of Array: ");
+    scanf("%d", &size);
+
+
+    printf("Enter the Elements of Array: ");
+    for(i = 0; i < size; i++) {
+        scanf("%d", &arr[i]);
+    }
+
+    //Traversal
+    traversal(arr, size);
+
+    //Linear Search
+    lsearch(arr, size);
+
+    //Insertion
+    insertion(arr, &size);
+
+    //Deletion
+    deletion(arr, &size);
+
+    //Bubble Sort
+    sort(arr, size);
+
+    //Binary Search
+    bsearch(arr, size);
+
+    return 0;
+
+}
+
+void traversal(int arr[], int n) {
+    printf("The Elements are: ");
+
+    for(i = 0; i < n; i++) {
+        printf("%d ", arr[i]);
+    }
+
+    printf("\n");
+}
+
+void lsearch(int arr[], int n) {
+    int key, flag = 0;
+    printf("Enter the Element: ");
+    scanf("%d", &key);
+
+    for(i = 0; i < n; i++) {
+        if(arr[i] == key) {
+            flag = 1;
+            break;
+        }
+    }
+    if(flag) printf("Element found at index %d\n", i);
+
+    else printf("Element not found\n");
+}
+
+void insertion(int arr[], int *n) {
+    int index, new;;
+    printf("Enter the value of insertion index: ");
+    scanf("%d", &index);
+
+    printf("Enter the value of new Element: ");
+    scanf("%d", &new);
+
+    for(i = *n; i > index; i--) {
+        arr[i] = arr[i - 1];
+    }
+    arr[index] = new;
+    (*n)++;
+
+    traversal(arr, *n);
+}
+
+void deletion(int arr[], int *n) {
+    int index;
+
+    printf("Enter the deletion index: ");
+    scanf("%d", &index);
+
+    for(i = index; i < *n - 1; i++) {
+        arr[i] = arr[i + 1];
+    }
+    (*n)--;
+
+    traversal(arr, *n);
+}
+
+void sort(int arr[], int n) {
+    int i, j, temp;
+
+    for(i = 0; i < n - 1; i++) {
+        for(j = 0; j < n - 1 - i; j++) {
+            if(arr[j] > arr[j + 1]) {
+                temp = arr[j];
+                arr[j] = arr[j + 1];
+                arr[j + 1] = temp;
+            }
+        }
+    }
+
+    traversal(arr, n);
+}
+
+void bsearch(int arr[], int n) {
+    sort(arr, n);
+
+    int high = n - 1, low = 0, mid;
+    int key, flag = 0;
+
+    printf("Enter the value of Key: ");
+    scanf("%d", &key);
+
+    while (high >= low) {
+        mid = (high + low) / 2;
+
+        if(key == arr[mid]) {
+            flag = 1;
+            break;
+        }
+
+        if(key > arr[mid]) {
+            low = mid + 1;
+        }
+
+        if(key < arr[mid]) {
+            high = mid - 1;
+        }
+    }
+    if(flag) {
+        printf("Key found");
+    }
+    else {
+        printf("Key not found");
+    }
+}
