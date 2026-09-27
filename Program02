@@ -1,0 +1,279 @@
+#include <stdio.h>
+
+int length(char str[]);
+void strcopy(char str1[], char str2[]);
+void reverse(char str[]);
+void palindrome(char str[]);
+void compare(char str1[]);
+void concat(char str1[]);
+
+/*---------------------------------------------*/
+
+int ptr_length(char *str);
+void ptr_strcopy(char *str1, char *str2);
+void ptr_reverse(char *str);
+void ptr_palindrome(char *str);
+void ptr_compare(char *str);
+void ptr_concat(char *str1, char *str2);
+
+int main()
+{
+    char str[100];
+    printf("Enter a string: ");
+    fgets(str, sizeof(str), stdin);
+
+    // Length
+    printf("String Length = %d\n", length(str));
+
+    // String Copy
+    char str2[100];
+    strcopy(str, str2);
+
+    //Reverse
+    reverse(str);
+
+    //Palindrome
+    palindrome(str);
+
+
+    //Compare
+    compare(str);
+
+
+    // Concatination
+    concat(str);
+
+/*-----------------------------------------*/
+    printf("\n\nUsing Pointers\n\n");
+/*-----------------------------------------*/
+
+    char strg[100];
+    printf("Enter a String: ");
+    fgets(strg, sizeof(strg), stdin);
+
+    //String Length
+    printf("Length of String = %d\n", ptr_length(strg));
+
+    //String Copy
+    char strg2[100];
+    ptr_strcopy(strg, strg2);
+
+    //String Reverse
+    ptr_reverse(strg);
+
+    //Palindrome
+    ptr_palindrome(strg);
+
+    //String Compare
+    ptr_compare(strg);
+
+    //Concatination
+
+    char strg3[100];
+    printf("Enter the string to Concatinate: ");
+    fgets(strg3, sizeof(strg3), stdin);
+
+    ptr_concat(strg, strg3); 
+}
+
+int length(char str[])
+{
+    int len = 0;
+
+    while (str[len] != '\n')
+    {
+        len++;
+    }
+
+    return len;
+}
+
+void strcopy(char str1[], char str2[])
+{
+    int i;
+    int len = length(str1);
+
+    for (i = 0; i < len; i++)
+    {
+        str2[i] = str1[i];
+    }
+    str2[len] = '\0';
+
+    printf("Copied String: %s\n", str2);
+}
+
+void concat(char str1[])
+{
+    int i;
+    char str2[100];
+
+    printf("Enter the Second String to Concatinate: ");
+    fgets(str2, sizeof(str2), stdin);
+
+    int len1 = length(str1);
+    int len2 = length(str2);
+
+    for (i = 0; i < len2; i++)
+    {
+        str1[len1 + i] = str2[i];
+    }
+    str1[len1 + len2] = '\0';
+
+    printf("Concatinated String: %s", str1);
+}
+
+void compare(char str1[]) {
+    char str2[100];
+    int flag = 1;
+
+    printf("Enter a String to compare: ");
+    fgets(str2, sizeof(str2), stdin);
+
+    if(length(str1) != length(str2)) {
+        flag = 0;
+    }
+    else {
+    int len = length(str1);
+    for(int i = 0; i < len; i++) {
+        if(str1[i] != str2[i]){
+            flag = 0;
+        }
+    }
+}
+
+if(flag) {
+    printf("Equal Strings\n");
+}
+
+else {
+    printf("Not Equal Strings\n");
+}
+
+}
+
+void palindrome(char str[]) {
+    int start = 0, end = length(str) - 1;
+    int flag = 1;
+
+    while(start <= end) {
+        if(str[start] != str[end]){
+            flag = 0;
+            break;
+        }
+        start++;
+        end--;
+    }
+    if(flag) {
+        printf("Given String is a Palindrome\n");
+    }
+
+    else {
+        printf("Given String is Not a Palindrome\n");
+    }
+}
+
+void reverse(char str[]) {
+    int len = length(str) - 1;
+
+    printf("Reversed String: ");
+
+    for(int i = len; i >= 0; i--) {
+        printf("%c", str[i]);
+    }
+
+    printf("\n");
+}
+
+/*------------------------------------------------------------------*/
+
+int ptr_length(char *str) {
+    int len = 0;
+    while (*str != '\n') {
+        str++;
+        len++;
+    }
+    return len;
+}
+
+void ptr_strcopy(char *str1, char *str2) {
+
+    char *p = str2;
+
+    while(*str1 != '\n') {
+        *str2 = *str1;
+        str1++;
+        str2++;
+    }
+    *str2 = '\0';
+
+    printf("Copied String: %s\n", p);
+}
+
+void ptr_concat(char *str1, char *str2) {
+    int len1 = ptr_length(str1);
+    int len2 = ptr_length(str2);
+
+
+    for(int i = 0; i < len2; i++) {
+        *(str1 + len1 + i) = *(str2 + i); 
+    }
+    *(str1 + len1 + len2) = '\0';
+    
+    printf("Concatinated String: %s\n", str1);
+}
+
+void ptr_compare(char *str) {
+    char str2[100];
+    char *p = str2;
+    int flag = 1;
+
+    printf("Enter a String to Compare: ");
+    fgets(str2, sizeof(str2), stdin);
+
+    while(*str != '\0') {
+        if(*str != *p) {
+            flag = 0;
+            break;
+        }
+        str++;
+        p++;
+    }
+    if (flag) {
+        printf("Equal Strings\n");
+    }
+    else {
+        printf("Not Equal Strings\n");
+    }
+}
+
+void ptr_palindrome(char *str) {
+    char *start = str;
+    char *end = str + ptr_length(str) - 1;
+    int flag = 1;
+
+    while (start <= end) {
+        if(*start != *end) {
+            flag = 0;
+            break;
+        }
+        start++;
+        end--;
+    }
+    if(flag) {
+        printf("Given String is a Palindrome\n");
+    }
+    else {
+        printf("Given String is Not a Palindrome\n");
+    }
+}
+
+void ptr_reverse(char *str) {
+    char *end = str + ptr_length(str) - 1;
+
+    printf("String in Reverse: ");
+    while (end >= str) {
+        printf("%c", *end);
+        end--;
+    }
+    printf("\n");
+}
