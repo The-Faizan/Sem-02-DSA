@@ -1,0 +1,235 @@
+
+#include <stdio.h>
+#include <stdlib.h>
+
+struct Node {
+    int data;
+    struct Node *next;
+};
+
+// Traversal
+void traversal(struct Node *head) {
+    struct Node *p = head;
+
+    while (p != NULL) {
+        printf("%d -> ", p->data);
+        p = p->next;
+    }
+
+    printf("NULL\n");
+}
+
+// Insertion at beginning
+struct Node *insbeg(struct Node *head, int value) {
+    struct Node *new = malloc(sizeof(struct Node));
+
+    if (new == NULL) {
+        printf("Memory not allocated\n");
+        return head;
+    }
+
+    new->data = value;
+    new->next = head;
+    head = new;
+
+    traversal(head);
+    return head;
+}
+
+// Insertion at end
+struct Node *insend(struct Node *head, int value) {
+    struct Node *new = malloc(sizeof(struct Node));
+
+    if (new == NULL) {
+        printf("Memory not allocated\n");
+        return head;
+    }
+
+    new->data = value;
+    new->next = NULL;
+
+    if (head == NULL) {
+        head = new;
+    } else {
+        struct Node *p = head;
+
+        while (p->next != NULL) {
+            p = p->next;
+        }
+
+        p->next = new;
+    }
+
+    traversal(head);
+    return head;
+}
+
+// Insertion at any position
+struct Node *insatany(struct Node *head, int value, int pos) {
+    if (pos < 1) {
+        printf("Invalid position\n");
+        return head;
+    }
+
+    if (pos == 1) {
+        return insbeg(head, value);
+    }
+
+    struct Node *p = head;
+
+    for (int i = 1; i < pos - 1 && p != NULL; i++) {
+        p = p->next;
+    }
+
+    if (p == NULL) {
+        printf("Invalid position\n");
+        return head;
+    }
+
+    struct Node *new = malloc(sizeof(struct Node));
+
+    if (new == NULL) {
+        printf("Memory not allocated\n");
+        return head;
+    }
+
+    new->data = value;
+    new->next = p->next;
+    p->next = new;
+
+    traversal(head);
+    return head;
+}
+
+// Deletion at beginning
+struct Node *delbeg(struct Node *head) {
+    if (head == NULL) {
+        printf("List is empty\n");
+        return head;
+    }
+
+    struct Node *temp = head;
+    head = head->next;
+    free(temp);
+
+    traversal(head);
+    return head;
+}
+
+// Deletion at end
+struct Node *delend(struct Node *head) {
+    if (head == NULL) {
+        printf("List is empty\n");
+        return head;
+    }
+
+    if (head->next == NULL) {
+        free(head);
+        head = NULL;
+    } else {
+        struct Node *p = head;
+
+        while (p->next->next != NULL) {
+            p = p->next;
+        }
+
+        free(p->next);
+        p->next = NULL;
+    }
+
+    traversal(head);
+    return head;
+}
+
+// Deletion at any position
+struct Node *delatany(struct Node *head, int pos) {
+    if (head == NULL) {
+        printf("List is empty\n");
+        return head;
+    }
+
+    if (pos < 1) {
+        printf("Invalid position\n");
+        return head;
+    }
+
+    if (pos == 1) {
+        return delbeg(head);
+    }
+
+    struct Node *p = head;
+
+    for (int i = 1; i < pos - 1 && p != NULL; i++) {
+        p = p->next;
+    }
+
+    if (p == NULL || p->next == NULL) {
+        printf("Invalid position\n");
+        return head;
+    }
+
+    struct Node *temp = p->next;
+    p->next = temp->next;
+    free(temp);
+
+    traversal(head);
+    return head;
+}
+
+// Free all remaining nodes
+void freeList(struct Node *head) {
+    while (head != NULL) {
+        struct Node *temp = head;
+        head = head->next;
+        free(temp);
+    }
+}
+
+int main() {
+    struct Node *head, *second, *third;
+
+    head = malloc(sizeof(struct Node));
+    second = malloc(sizeof(struct Node));
+    third = malloc(sizeof(struct Node));
+
+    if (head == NULL || second == NULL || third == NULL) {
+        printf("Memory not allocated\n");
+        free(head);
+        free(second);
+        free(third);
+        return 1;
+    }
+
+    head->data = 10;
+    second->data = 20;
+    third->data = 30;
+
+    head->next = second;
+    second->next = third;
+    third->next = NULL;
+
+    printf("Initial list: ");
+    traversal(head);
+
+    // Insertion at beginning
+    head = insbeg(head, 5);
+
+    // Insertion at end
+    head = insend(head, 40);
+
+    // Insertion at any position
+    head = insatany(head, 25, 3);
+
+    // Deletion at beginning
+    head = delbeg(head);
+
+    // Deletion at end
+    head = delend(head);
+
+    // Deletion at any position
+    head = delatany(head, 2);
+
+    freeList(head);
+
+    return 0;
+}
