@@ -1,0 +1,144 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+struct Node {
+    int data;
+    struct Node *next;
+};
+
+void traversal(struct Node *head) {
+    struct Node *temp = head;
+    while (temp != NULL) {
+        printf("%d ", temp -> data);
+        temp = temp -> next;
+    }
+    printf("\n");
+}
+
+struct Node* insatbeg(struct Node *head, int value) {
+    struct Node *newNode;
+    newNode = malloc(sizeof(struct Node));
+
+    newNode -> data = value;
+    newNode -> next = head;
+    head = newNode;
+
+    return head;
+}
+
+struct Node *insatend(struct Node *head, int value) {
+    struct Node *newNode = malloc(sizeof(struct Node));
+
+    newNode -> data = value;
+    newNode -> next = NULL;
+
+    struct Node *temp = head;
+    while(temp -> next != NULL) {
+        temp = temp -> next;
+    }
+    temp -> next = newNode;
+
+    return head;
+}
+
+struct Node *insatany(struct Node *head, int pos, int value) {
+    struct Node *newNode = malloc(sizeof(struct Node));
+
+    newNode -> data = value;
+    
+    if(pos == 1) {
+        newNode -> next = head;
+        head = newNode;
+    }
+
+    struct Node *temp = head;
+    for(int i = 1; i < pos - 1; i++) {
+        temp = temp -> next;
+    }
+    newNode -> next = temp -> next;
+    temp -> next = newNode;
+
+    return head;
+    
+}
+
+struct Node *delatend(struct Node *head) {
+    struct Node *temp = head;
+
+    while (temp -> next -> next != NULL) {
+        temp = temp -> next;
+    }
+
+    free(temp -> next);
+    temp -> next = NULL;
+
+    return head;
+}
+
+struct Node *delatbeg(struct Node *head) {
+    struct Node *temp = head;
+
+    head = head -> next;
+    free(temp);
+
+    return head;
+}
+
+struct Node *delatany(struct Node *head, int pos) {
+    if (pos == 1) {
+        head = delatbeg(head);
+        return head;
+    }
+
+    else {
+        struct Node *temp = head;
+        for(int i = 1; i < pos - 1; i++) {
+            temp = temp -> next;
+        }
+        
+        struct Node *del = temp -> next;
+        temp -> next = temp -> next -> next;
+        free(del);
+
+        return head;
+    }
+}
+
+int main() 
+{
+    struct Node *head, *second, *third;
+    head = malloc(sizeof(struct Node));
+    second = malloc(sizeof(struct Node));
+    third = malloc(sizeof(struct Node));
+
+
+    if(head == NULL || second == NULL || third == NULL) {
+        printf("No Memory Allocated");
+        return 1;
+    }
+
+    head -> data = 10;
+    second -> data = 20;
+    third -> data = 30;
+
+    head -> next = second;
+    second -> next = third;
+    third -> next = NULL;
+
+    traversal(head);
+    head = insatbeg(head, 0);
+    traversal(head);
+    insatend(head, 40);
+    traversal(head);
+    head = insatany(head, 2, 5);
+    traversal(head);
+
+    head = delatbeg(head);
+    traversal(head);
+    delatend(head);
+    traversal(head);
+    head = delatany(head, 1);
+    traversal(head);
+
+    return 0;
+}
